@@ -1,4 +1,5 @@
 # 6.00.2x Problem Set 2: Simulating robots
+# SUbmitted by Jacob Okoro
 
 import math
 import random
