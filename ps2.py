@@ -170,7 +170,7 @@ class RectangularRoom(object):
         x = pos.getX()
         y = pos.getY()
         if x >= 0 and y >= 0:
-            if x <= self.width and y <= self.height:
+            if x < self.width and y < self.height:
                 return True
         return False
 
