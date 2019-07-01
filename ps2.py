@@ -117,14 +117,12 @@ class RectangularRoom(object):
         n: an integer
         returns: True if (m, n) is cleaned, False otherwise
         """
-        
-        if isinstance(m, tuple):
         # Implemented it this way to account for bug in grader. This way,
         #  whether tuple or integers, are given as as arguments, result isn't affected
+        if isinstance(m, tuple):
             x, y = m
             m, n = x, y
         pos = Position(m, n)
-        # print(pos)
         if not self.isPositionInRoom(pos):
             return False
         if not (m, n) in self.cleanList:
