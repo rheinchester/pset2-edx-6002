@@ -102,9 +102,9 @@ class RectangularRoom(object):
         x = int(pos.getX())
         y = int(pos.getY())
         if not self.isPositionInRoom(pos):
-            return False
+            raise ValueError('Invalid posiiton')
         if (x, y) in self.getCleanList():
-            return 'Already clean'
+            raise ValueError('Already clean')
         self.cleanList.append((x, y))
 
 
@@ -118,12 +118,14 @@ class RectangularRoom(object):
         n: an integer
         returns: True if (m, n) is cleaned, False otherwise
         """
-        # Implemented it this way to account for bug in grader that passed in  arguments as tuples.
-        # This way, whether tuple or integers, are given as as arguments, result isn't affected
+        # Implemented this way to account for instances where grader passed in tuples
+        # rather than integer- integers are the intended arguments required(see doc string)
         if isinstance(m, tuple):
             x, y = m
             m, n = x, y
         pos = Position(m, n)
+        # an optimisation to ensure that time
+        # is not wasted checking tiles outside room
         if not self.isPositionInRoom(pos):
             return False
         if not (m, n) in self.cleanList:
@@ -194,7 +196,10 @@ class Robot(object):
         room:  a RectangularRoom object.
         speed: a float (speed > 0)
         """
-        raise NotImplementedError
+        self.room = room
+        self.position = room.getRandomPosition()
+        self.speed = float(speed) if speed > 0 else 1.00
+        self.direction = random.randint(0, 360)
 
     def getRobotPosition(self):
         """
@@ -202,7 +207,7 @@ class Robot(object):
 
         returns: a Position object giving the robot's position.
         """
-        raise NotImplementedError
+        return self.position
     
     def getRobotDirection(self):
         """
@@ -211,7 +216,7 @@ class Robot(object):
         returns: an integer d giving the direction of the robot as an angle in
         degrees, 0 <= d < 360.
         """
-        raise NotImplementedError
+        return self.direction
 
     def setRobotPosition(self, position):
         """
@@ -219,7 +224,7 @@ class Robot(object):
 
         position: a Position object.
         """
-        raise NotImplementedError
+        self.position = position
 
     def setRobotDirection(self, direction):
         """
@@ -227,7 +232,8 @@ class Robot(object):
 
         direction: integer representing an angle in degrees
         """
-        raise NotImplementedError
+        if direction >= 0 and direction <= 360:
+            self.direction = int(direction)
 
     def updatePositionAndClean(self):
         """
