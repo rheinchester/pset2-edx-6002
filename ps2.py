@@ -86,7 +86,7 @@ class RectangularRoom(object):
         """
         self.width = int(width) if width > 0 else 1
         self.height = int(height) if height > 0 else 1
-        self.cleanList = [] #uses list to keep track of clean tiles
+        self.cleanList = {} #uses list to keep track of clean tiles
     
     def getCleanList(self):
         return self.cleanList
@@ -101,11 +101,12 @@ class RectangularRoom(object):
         """
         x = int(pos.getX())
         y = int(pos.getY())
-        if not self.isPositionInRoom(pos):
-            raise ValueError('Invalid posiiton')
+        # if not self.isPositionInRoom(pos):
+        #     raise ValueError('Invalid posiiton')
         if (x, y) in self.getCleanList():
-            raise ValueError('Already clean')
-        self.cleanList.append((x, y))
+            self.cleanList[(x, y)] += 1
+        else:
+            self.cleanList[(x, y)] = 1
 
 
     def isTileCleaned(self, m, n=0):
@@ -119,7 +120,7 @@ class RectangularRoom(object):
         returns: True if (m, n) is cleaned, False otherwise
         """
         # Implemented this way to account for instances where grader passed in tuples
-        # rather than integer- integers are the intended arguments required(see doc string)
+        # rather than integer - integers are the intended arguments required(see doc string)
         if isinstance(m, tuple):
             x, y = m
             m, n = x, y
@@ -200,6 +201,7 @@ class Robot(object):
         self.position = room.getRandomPosition()
         self.speed = float(speed) if speed > 0 else 1.00
         self.direction = random.randint(0, 360)
+        self.room.cleanTileAtPosition(self.position)
 
     def getRobotPosition(self):
         """
@@ -216,7 +218,7 @@ class Robot(object):
         returns: an integer d giving the direction of the robot as an angle in
         degrees, 0 <= d < 360.
         """
-        return self.direction
+        return int(self.direction)
 
     def setRobotPosition(self, position):
         """
@@ -254,6 +256,7 @@ class StandardRobot(Robot):
     direction; when it would hit a wall, it *instead* chooses a new direction
     randomly.
     """
+        # round(pos.getX()) == roomHeight or round(pos.getX())== 0) or (round(pos.getY()) == roomWidth or round(pos.getY()) == 0
     def updatePositionAndClean(self):
         """
         Simulate the passage of a single time-step.
@@ -261,11 +264,26 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        pos =  self.getRobotPosition()
+        speed = self.speed
+        self.room.cleanTileAtPosition(pos)
+        direction = self.getRobotDirection()
+        if (self.room.isPositionInRoom(pos.getNewPosition(direction, speed)) == False):
+            direction = random.randint(0, 360)
+            self.setRobotDirection(direction)
+            self.setRobotPosition(pos.getNewPosition(direction, speed))
+            self.updatePositionAndClean()
+        else:
+            self.setRobotPosition(pos.getNewPosition(direction, speed))
+            
+            
+        
+
+            
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-##testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
