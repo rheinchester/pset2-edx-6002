@@ -272,8 +272,8 @@ class StandardRobot(Robot):
             direction = random.randint(0, 360)
             self.setRobotDirection(direction)
         else:
-            self.setRobotPosition(pos.getNewPosition(direction, speed))
-            self.room.cleanTileAtPosition(pos)
+            self.setRobotPosition(next_tile)
+            self.room.cleanTileAtPosition(next_tile)
 
         
 
