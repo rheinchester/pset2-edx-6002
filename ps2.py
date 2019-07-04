@@ -281,7 +281,7 @@ class StandardRobot(Robot):
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+# testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -303,10 +303,40 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+
+    totalTime = 0
+    for trial in range(num_trials):
+        time_step = 0
+        room = RectangularRoom(width, height)
+        robot = robot_type(room, speed)
+        fraction = min_coverage*room.getNumTiles()
+        while room.getNumCleanedTiles() <= fraction:
+            robot.updatePositionAndClean()
+            toClean = 0 if room.getNumCleanedTiles() == 1 else 1
+            time_step += toClean
+        totalTime += time_step
+    mean = (totalTime/num_trials)
+    return mean/num_robots
+    
+
+            
+
+# One robot takes around 150 clock ticks to completely clean a 5x5 room.
+# One robot takes around 190 clock ticks to clean 75 % of a 10x10 room.
+# One robot takes around 310 clock ticks to clean 90 % of a 10x10 room.
+# One robot takes around 3322 clock ticks to completely clean a 20x20 room.
+# Three robots take around 1105 clock ticks to completely clean a 20x20 room.
 
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+# print(runSimulation(1, 1.0, 5, 5, 0.9999999, 30, StandardRobot))          #tc1
+# print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))          #tc2
+# print(runSimulation(1, 1.0, 10, 10, 0.90, 30, StandardRobot))          #tc3
+# print(runSimulation(1, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))          #tc4
+# print(runSimulation(3, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))          #tc5
+
+
+
+
 
 
 # === Problem 5
@@ -430,4 +460,17 @@ pos = Position(5.00, 6.10)
 room.cleanTileAtPosition(pos)
 # print(room.isTileCleaned((0, 0)))
 # room.isTileCleaned(1, 2)
-print(room.isPositionInRoom(pos))
+# print(room.isPositionInRoom(pos))
+
+# totalTime = 0
+# for trial in range(num_trials):
+#     time_step = 0
+#     room = RectangularRoom(width, height)
+#     robot = robot_type(room, speed)
+#     fraction = min_coverage*room.getNumTiles()
+#     while room.getNumCleanedTiles() <= fraction:
+#         robot.updatePositionAndClean()
+#         time_step +=1
+#     totalTime += time_step
+#     mean = time_step/num_trials
+#     return mean
