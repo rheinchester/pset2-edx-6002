@@ -269,8 +269,8 @@ class StandardRobot(Robot):
         direction = self.getRobotDirection()
         next_tile = pos.getNewPosition(direction, speed)
         if (self.room.isPositionInRoom(next_tile) == False):
-            direction = random.randint(0, 360)
             self.setRobotDirection(direction)
+            direction = random.randint(0, 360)
         else:
             self.setRobotPosition(next_tile)
             self.room.cleanTileAtPosition(next_tile)
@@ -280,7 +280,7 @@ class StandardRobot(Robot):
             
 
 
-# Uncomment this line to see your implementation of StandardRobot in action!
+# # Uncomment this line to see your implementation of StandardRobot in action!
 # testRobotMovement(StandardRobot, RectangularRoom)
 
 
@@ -315,7 +315,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
             toClean = 0 if room.getNumCleanedTiles() == 1 else 1
             time_step += toClean
         totalTime += time_step
-    mean = (totalTime/num_trials)
+    mean = totalTime/num_trials
     return mean/num_robots
     
 
@@ -329,10 +329,10 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
 
 # Uncomment this line to see how much your simulation takes on average
 # print(runSimulation(1, 1.0, 5, 5, 0.9999999, 30, StandardRobot))          #tc1
-# print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))          #tc2
-# print(runSimulation(1, 1.0, 10, 10, 0.90, 30, StandardRobot))          #tc3
-# print(runSimulation(1, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))          #tc4
-# print(runSimulation(3, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))          #tc5
+# print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))             #tc2
+# print(runSimulation(1, 1.0, 10, 10, 0.90, 30, StandardRobot))             #tc3
+# print(runSimulation(1, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))     #tc4
+# print(runSimulation(3, 1.0, 20, 20, 0.9999999999, 30, StandardRobot))     #tc5
 
 
 
@@ -352,8 +352,26 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        pos = self.getRobotPosition()
+        speed = self.speed
+        direction = self.getRobotDirection()
+        next_tile = pos.getNewPosition(direction, speed)
+        if (next_tile and self.room.isPositionInRoom(next_tile) != False):
+            direction = random.randint(0, 360)
+            self.setRobotDirection(direction)
+            self.setRobotPosition(next_tile)
+            self.room.cleanTileAtPosition(next_tile)
+        else:
+            direction = random.randint(0, 360)
+            self.setRobotDirection(direction)
 
+        
+
+
+
+
+# Uncomment this line to see your implementation of StandardRobot in action!
+testRobotMovement(RandomWalkRobot, RectangularRoom)
 
 def showPlot1(title, x_label, y_label):
     """
