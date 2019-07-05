@@ -86,7 +86,9 @@ class RectangularRoom(object):
         """
         self.width = int(width) if width > 0 else 1
         self.height = int(height) if height > 0 else 1
-        self.cleanList = {} #uses list to keep track of clean tiles
+        self.cleanList = {} 
+        #PS it's named cleanList because i used a list at first to keep track of tiles until  
+        # limitatinos during simulation forced me to use a dict.
     
     def getCleanList(self):
         return self.cleanList
@@ -101,8 +103,6 @@ class RectangularRoom(object):
         """
         x = int(pos.getX())
         y = int(pos.getY())
-        # if not self.isPositionInRoom(pos):
-        #     raise ValueError('Invalid posiiton')
         if (x, y) in self.getCleanList():
             self.cleanList[(x, y)] += 1
         else:
