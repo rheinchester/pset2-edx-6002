@@ -1,10 +1,10 @@
 # 6.00.2x Problem Set 2: Simulating robots
 # SUbmitted by Jacob Okoro
 
-import math
+from matplotlib import pylab
+from pylab import *
 import random
-
-import pylab
+import math
 
 import ps2_visualize
 # For Python 3.6:
@@ -257,31 +257,31 @@ class StandardRobot(Robot):
     randomly.
     """
         # round(pos.getX()) == roomHeight or round(pos.getX())== 0) or (round(pos.getY()) == roomWidth or round(pos.getY()) == 0
+
     def updatePositionAndClean(self):
         """
         Simulate the passage of a single time-step.
-
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        pos =  self.getRobotPosition()
+        pos = self.getRobotPosition()
         speed = self.speed
         direction = self.getRobotDirection()
         next_tile = pos.getNewPosition(direction, speed)
         if (self.room.isPositionInRoom(next_tile) == False):
-            self.setRobotDirection(direction)
             direction = random.randint(0, 360)
+            self.setRobotDirection(direction)
         else:
             self.setRobotPosition(next_tile)
             self.room.cleanTileAtPosition(next_tile)
 
-        
+
 
             
 
 
 # # Uncomment this line to see your implementation of StandardRobot in action!
-# testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -371,26 +371,26 @@ class RandomWalkRobot(Robot):
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(RandomWalkRobot, RectangularRoom)
+# testRobotMovement(RandomWalkRobot, RectangularRoom)
 
-def showPlot1(title, x_label, y_label):
-    """
-    What information does the plot produced by this function tell you?
-    """
-    num_robot_range = range(1, 11)
-    times1 = []
-    times2 = []
-    for num_robots in num_robot_range:
-        print("Plotting", num_robots, "robots...")
-        times1.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, StandardRobot))
-        times2.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, RandomWalkRobot))
-    pylab.plot(num_robot_range, times1)
-    pylab.plot(num_robot_range, times2)
-    pylab.title(title)
-    pylab.legend(('StandardRobot', 'RandomWalkRobot'))
-    pylab.xlabel(x_label)
-    pylab.ylabel(y_label)
-    pylab.show()
+# def showPlot1(title, x_label, y_label):
+#     """
+#     What information does the plot produced by this function tell you?
+#     """
+#     num_robot_range = range(1, 11)
+#     times1 = []
+#     times2 = []
+#     for num_robots in num_robot_range:
+#         print("Plotting", num_robots, "robots...")
+#         times1.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, StandardRobot))
+#         times2.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, RandomWalkRobot))
+#     plot(num_robot_range, times1)
+#     plot(num_robot_range, times2)
+#     title(title)
+#     legend(('StandardRobot', 'RandomWalkRobot'))
+#     xlabel(x_label)
+#     ylabel(y_label)
+#     show()
 
     
 def showPlot2(title, x_label, y_label):
@@ -406,19 +406,18 @@ def showPlot2(title, x_label, y_label):
         aspect_ratios.append(float(width) / height)
         times1.append(runSimulation(2, 1.0, width, height, 0.8, 200, StandardRobot))
         times2.append(runSimulation(2, 1.0, width, height, 0.8, 200, RandomWalkRobot))
-    pylab.plot(aspect_ratios, times1)
-    pylab.plot(aspect_ratios, times2)
-    pylab.title(title)
-    pylab.legend(('StandardRobot', 'RandomWalkRobot'))
-    pylab.xlabel(x_label)
-    pylab.ylabel(y_label)
-    pylab.show()
+    plot(aspect_ratios, times1)
+    plot(aspect_ratios, times2)
+    title(title)
+    legend(('StandardRobot', 'RandomWalkRobot'))
+    xlabel(x_label)
+    ylabel(y_label)
+    show()
     
 
 # === Problem 6
 # NOTE: If you are running the simulation, you will have to close it 
 # before the plot will show up.
-
 #
 # 1) Write a function call to showPlot1 that generates an appropriately-labeled
 #     plot.
@@ -432,6 +431,7 @@ def showPlot2(title, x_label, y_label):
 #
 #       (... your call here ...)
 #
+showPlot2("Plotting cleaning time for a room of width"," x_label", "y_label")
 
 
 
@@ -480,15 +480,3 @@ room.cleanTileAtPosition(pos)
 # room.isTileCleaned(1, 2)
 # print(room.isPositionInRoom(pos))
 
-# totalTime = 0
-# for trial in range(num_trials):
-#     time_step = 0
-#     room = RectangularRoom(width, height)
-#     robot = robot_type(room, speed)
-#     fraction = min_coverage*room.getNumTiles()
-#     while room.getNumCleanedTiles() <= fraction:
-#         robot.updatePositionAndClean()
-#         time_step +=1
-#     totalTime += time_step
-#     mean = time_step/num_trials
-#     return mean
